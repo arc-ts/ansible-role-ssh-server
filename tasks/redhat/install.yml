@@ -1,0 +1,17 @@
+---
+
+- name: INSTALL - Install ssh-server
+  package: name='openssh-server-{{ ssh_server_version }}*' state=present
+  register: _external_dependency_success
+  until: _external_dependency_success|success
+  retries: '{{ external_dependency_retries }}'
+  delay: '{{ external_dependency_delay }}'
+  when: (ssh_server_version is defined) and (ssh_server_version is not none)
+
+- name: INSTALL - Install Latest ssh-server
+  package: name='openssh-server' state=latest
+  register: _external_dependency_success
+  until: _external_dependency_success|success
+  retries: '{{ external_dependency_retries }}'
+  delay: '{{ external_dependency_delay }}'
+  when: (ssh_server_version is not defined) or (ssh_server_version is none)

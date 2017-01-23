@@ -1,0 +1,13 @@
+---
+- name: ssh_server
+  hosts: ssh_servers
+  connection: local
+  gather_facts: true
+  roles:
+    - ssh-server
+  vars:
+    ssh_server_config:
+      hostkey:
+        - /etc/ssh/ssh_host_rsa_key
+        - /etc/ssh/ssh_host_ecdsa_key
+        - /etc/ssh/ssh_host_ed25519_key

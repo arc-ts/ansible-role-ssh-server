@@ -1,0 +1,58 @@
+---
+
+_ssh_server_service_name: sshd
+_ssh_server_bin_path: /sbin/sshd
+
+_ssh_server_key_defaults:
+  mode: '0640'
+  owner: root
+  group: ssh_heys
+  pub_key:
+    mode: '0644'
+    owner: root
+    group: root
+
+_ssh_server_config_defaults:
+  acceptenv:
+    - LANG
+    - LC_CTYPE
+    - LC_NUMERIC
+    - LC_TIME
+    - LC_COLLATE
+    - LC_MONETARY
+    - LC_MESSAGES
+    - LC_PAPER
+    - LC_NAME
+    - LC_ADDRESS
+    - LC_TELEPHONE
+    - LC_MEASUREMENT
+    - LC_IDENTIFICATION
+    - LC_ALL
+    - LANGUAGE
+    - XMODIFIERS
+  authorizedkeysfile: .ssh/authorized_keys
+  challengeresponseauthentication: "no"
+  gssapiauthentication: "yes"
+  gssapicleanupcredentials: "no"
+  hostkey:
+    - /etc/ssh/ssh_host_rsa_key
+    - /etc/ssh/ssh_host_ecdsa_key
+    - /etc/ssh/ssh_host_ed25519_key
+  passwordauthentication: "yes"
+  usepam: "yes"
+  useprivilegeseparation: sandbox
+  subsystem: sftp /usr/libexec/openssh/sftp-server
+  syslogfacility: AUTHPRIV
+  x11forwarding: "yes"
+_ssh_server_config_file_defaults:
+  path: /etc/ssh/sshd_config
+  owner: root
+  group: root
+  mode: '0600'
+_ssh_server_env_defaults:
+  SSH_USE_STRONG_RNG: 0
+_ssh_server_env_file_defaults:
+  path: /etc/sysconfig/sshd
+  owner: root
+  group: root
+  mode: '0640'

@@ -1,0 +1,29 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  author: Bob Killen
+  description: Installs and nanages openssh-server
+  company: University of Michigan
+  issue_tracker_url: https://github.com/arc-ts/ansible-role-ssh-server/issues
+  license: MIT
+  min_ansible_version: 2.1
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+    - name: Debian
+      versions:
+        - jessie
+    - name: EL
+      versions:
+        - 7
+
+  galaxy_tags:
+    - ssh
+    - sshd
+    - ssh-server
+    - openssh

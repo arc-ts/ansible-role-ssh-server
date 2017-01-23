@@ -1,0 +1,57 @@
+---
+
+_ssh_server_service_name: ssh
+_ssh_server_bin_path: /usr/sbin/sshd
+
+_ssh_server_key_defaults:
+  mode: '0600'
+  owner: root
+  group: root
+  pub_key:
+    mode: '0644'
+    owner: root
+    group: root
+
+_ssh_server_config_defaults:
+  acceptenv:
+    - LANG
+    - LC_*
+  challengeresponseauthentication: "no"
+  hostbasedauthentication: "no"
+  hostkey:
+    - /etc/ssh/ssh_host_rsa_key
+    - /etc/ssh/ssh_host_dsa_key
+    - /etc/ssh/ssh_host_ecdsa_key
+    - /etc/ssh/ssh_host_ed25519_key
+  keyregenerationinterval: 3600
+  logingracetime: 120
+  loglevel: INFO
+  permitemptypasswords: "no"
+  permitrootlogin: without-password
+  port: 22
+  printlastlog: "no"
+  printmotd: "no"
+  pubkeyauthentication: "yes"
+  useprivilegeseparation: "yes"
+  rhostsrsaauthentication: "no"
+  rsaauthentication: "yes"
+  serverkeybits: 1024
+  strictmodes: "yes"
+  subsystem: 'sftp /usr/lib/openssh/sftp-server'
+  syslogfacility: AUTH
+  tcpkeepalive: "yes"
+  usepam: "yes"
+  x11displayoffset: 10
+  x11forwarding: "yes"
+_ssh_server_config_file_defaults:
+  path: /etc/ssh/sshd_config
+  owner: 'root'
+  group: 'root'
+  mode: '0644'
+_ssh_server_env_defaults:
+  SSHD_OPTS:
+_ssh_server_env_file_defaults:
+  path: /etc/default/ssh
+  owner: root
+  group: root
+  mode: '0644'

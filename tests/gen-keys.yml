@@ -1,0 +1,24 @@
+---
+- name: ssh_server
+  hosts: ssh_servers
+  connection: local
+  gather_facts: true
+  roles:
+    - ssh-server
+  vars:
+    ssh_server_gen_keys: true
+    ssh_server_keys:
+      - path: /etc/ssh/ssh_host_rsa_key
+        cipher: rsa
+        bits: 2048
+      - path: /etc/ssh/ssh_host_ecdsa_key
+        cipher: ecdsa
+        bits: 256
+      - path: /etc/ssh/ssh_host_ed25519_key
+        cipher: ed25519
+        bits: 256
+    ssh_server_config:
+      hostkey:
+        - /etc/ssh/ssh_host_rsa_key
+        - /etc/ssh/ssh_host_ecdsa_key
+        - /etc/ssh/ssh_host_ed25519_key

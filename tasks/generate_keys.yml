@@ -1,0 +1,22 @@
+---
+
+- name: KEYS - Generate Keys
+  shell: "echo 'y' | ssh-keygen -f {{ item.path }} -N '' \
+    -t {{ item.cipher }} -b {{ item.bits }} {{ item.args|default('') }}"
+  with_items: '{{ ssh_server_keys|default([]) }}'
+
+- name: KEYS - Set Key Permissions
+  file:
+    path: '{{ item.path }}'
+    owner: '{{ item.owner }}'
+    group: '{{ item.group }}'
+    mode: '{{ item.mode }}'
+  with_items: '{{ ssh_server_keys|default([]) }}'
+
+- name: KEYS - Set Pub Key Permissions
+  file:
+    path: '{{ item.path }}.pub'
+    owner: '{{ item.pub_key.owner }}'
+    group: '{{ item.pub_key.group }}'
+    mode: '{{ item.pub_key.mode }}'
+  with_items: '{{ ssh_server_keys|default([]) }}'

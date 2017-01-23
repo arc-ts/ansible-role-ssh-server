@@ -1,0 +1,23 @@
+---
+
+- name: PREREQS - Get OS Defaults
+  include_vars: '{{ ansible_distribution|lower }}_{{ ansible_distribution_major_version }}.yml'
+
+- name: PREREQS - Generate Key spec
+  set_fact:
+    _ssh_server_keys: '{{ _ssh_server_keys|default([]) +
+      [_ssh_server_key_defaults|combine(item|default({}))] }}'
+  when: ssh_server_gen_keys|bool == true
+  with_items: '{{ ssh_server_keys|default([]) }}'
+
+- name: PREREQS - Set OS Defaults
+  set_fact:
+    ssh_server_keys: '{{ _ssh_server_keys|default([]) }}'
+    ssh_server_config: '{{ ssh_server_config|default({})|
+      combine(_ssh_server_config_defaults) }}'
+    ssh_server_env: '{{ ssh_server_env|default({})|
+      combine(_ssh_server_env_defaults) }}'
+    ssh_server_config_file: '{{ ssh_server_config_file|default({})|
+      combine(_ssh_server_config_file_defaults) }}'
+    ssh_server_env_file: '{{ ssh_server_env_file|default({})|
+      combine(_ssh_server_env_file_defaults) }}'

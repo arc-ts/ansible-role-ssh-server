@@ -1,0 +1,17 @@
+---
+
+- name: MAIN - Include Prereqs
+  include: prereqs.yml
+
+- name: MAIN - Install ssh-server
+  include: '{{ ansible_os_family|lower }}/install.yml'
+
+# Managing the host keys with this method is targeted for first provision post clone.
+# Not really intended to be something that is done more than once unless there is a
+# very specific reason to rotate the host key(). NOTE: It is NOT idempotent.
+- name: MAIN - Manage Host SSH Keys
+  include: generate_keys.yml
+  when: ssh_server_gen_keys|bool == true
+
+- name: MAIN - Config ssh-server
+  include: config.yml

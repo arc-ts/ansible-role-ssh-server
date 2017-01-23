@@ -1,0 +1,37 @@
+---
+
+- name: CONFIG - Config ssh-server
+  template:
+    src: sshd_config.j2
+    dest: '{{ ssh_server_config_file.path }}'
+    owner: '{{ ssh_server_config_file.owner }}'
+    group: '{{ ssh_server_config_file.group }}'
+    mode: '{{ ssh_server_config_file.mode }}'
+    validate: '{{ _ssh_server_bin_path }} -t -f %s'
+  register: _ssh_server_config_status
+
+- name: COFIG - Config ssh-server Environment Variables
+  template:
+    src: env.j2
+    dest: '{{ ssh_server_env_file.path }}'
+    owner: '{{ ssh_server_env_file.owner }}'
+    group: '{{ ssh_server_env_file.group }}'
+    mode: '{{ ssh_server_env_file.mode }}'
+  register: _ssh_server_env_status
+  when: (ssh_server_env_config is defined) and (ssh_server_env_config is not none)
+
+- name: CONFIG - Execute Systemd Daemon-Reload
+  systemd: daemon_reload=true name='{{ _ssh_server_service_name }}'
+  when: ansible_service_mgr == 'systemd'
+
+- name: CONFIG - Start ssh-server Service
+  service: name='{{_ssh_server_service_name }}' enabled=true state=started
+  register: _ssh_server_service_status
+  when: (_ssh_server_config_status.changed) or (_ssh_server_env_status.changed)
+
+  # service must always be restarted if any host keys were generated
+- name: CONFIG - Restart ssh-server Service
+  service: name='{{ _ssh_server_service_name }}' enabled=true state=restarted sleep=5
+  when: (ssh_server_gen_keys|bool == true) or
+        ((not _ssh_server_service_status.changed) and
+        ((_ssh_server_config_status.changed) or (_ssh_server_env_status.changed)))
