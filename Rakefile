@@ -34,18 +34,19 @@ namespace :integration do # rubocop:disable Metrics/BlockLength
   end
 
   Kitchen.logger = Kitchen.default_file_logger
+  @log_level = (ENV['KITCHEN_LOG'] || 'info').to_sym
 
   desc 'Execute all test suites using the Vagrant Provider'
   task :vagrant do
     @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.yml')
-    config = Kitchen::Config.new(loader: @loader)
+    config = Kitchen::Config.new(loader: @loader, log_level: @log_level)
     concurrency = (ENV['concurrency'] || '1').to_i
     task_runner(config, '.*', 'test', concurrency)
   end
 
   namespace :vagrant do
     @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.yml')
-    config = Kitchen::Config.new(loader: @loader)
+    config = Kitchen::Config.new(loader: @loader, log_level: @log_level)
     concurrency = (ENV['concurrency'] || '1').to_i
 
     desc 'Execute ssh-server defaults test suite with Vagrant provider.'
@@ -69,14 +70,14 @@ namespace :integration do # rubocop:disable Metrics/BlockLength
     desc 'Execute all test suites using the Cloud Provider'
     task :cloud do
       @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')
-      config = Kitchen::Config.new(loader: @loader)
+      config = Kitchen::Config.new(loader: @loader, log_level: @log_level)
       concurrency = (ENV['concurrency'] || '8').to_i
       task_runner(config, '.*', 'test', concurrency)
     end
 
     namespace :cloud do # rubocop:disable Metrics/BlockLength
       @loader = Kitchen::Loader::YAML.new(local_config: '.kitchen.cloud.yml')
-      config = Kitchen::Config.new(loader: @loader)
+      config = Kitchen::Config.new(loader: @loader, log_level: @log_level)
       concurrency = (ENV['concurrency'] || '8').to_i
 
       desc 'Execute ssh-server defaults test suite with Cloud provider'
