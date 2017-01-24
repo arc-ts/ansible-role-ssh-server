@@ -6,7 +6,7 @@ _ssh_server_bin_path: /sbin/sshd
 _ssh_server_key_defaults:
   mode: '0640'
   owner: root
-  group: ssh_heys
+  group: ssh_keys
   pub_key:
     mode: '0644'
     owner: root
